@@ -1,0 +1,161 @@
+---
+title: Authentication
+description: Learn how to set up and manage authentication for Aaron AI Documentation
+---
+
+## Authentication Overview
+
+Secure access to your Aaron AI Documentation is crucial for protecting sensitive information and controlling who can view or edit your projects. We support multiple authentication methods to fit different organizational needs, from simple email/password login to enterprise SSO integration.
+
+## Supported Authentication Methods
+
+Aaron AI offers flexible authentication options to accommodate various security requirements and user preferences.
+
+<Tabs>
+  <Tab title="Email & Password" icon="mail">
+    The simplest authentication method using email and password combinations. Ideal for small teams and personal projects.
+    
+    <Steps>
+      <Step title="Register Account" icon="user-plus">
+        Create your account by providing a valid email address and choosing a strong password.
+        
+        <CodeGroup tabs="JavaScript,Python">
+          ````javascript
+          const registerUser = async (email, password) => {
+            const response = await fetch('/api/auth/register', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email, password })
+            });
+            return response.json();
+          };
+          
+          registerUser('user@example.com', 'securePass123!');
+          ````
+          ````python
+          import requests
+          
+          def register_user(email, password):
+            response = requests.post('/api/auth/register', 
+              json={'email': email, 'password': password})
+            return response.json()
+          
+          register_user('user@example.com', 'securePass123!')
+          ````
+        </CodeGroup>
+      </Step>
+      <Step title="Verify Email" icon="check-circle">
+        Check your email for a verification link and click to activate your account.
+      </Step>
+      <Step title="Login" icon="log-in">
+        Use your credentials to log into the Aaron AI platform.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="OAuth Providers" icon="share-2">
+    Connect with popular OAuth providers like Google, GitHub, and Microsoft for seamless authentication.
+    
+    <Callout kind="info">OAuth integration eliminates password management and provides single sign-on capabilities.</Callout>
+    
+    <Expandable title="Supported Providers" default-open="false">
+      - Google Workspace
+      - GitHub
+      - Microsoft Azure AD
+      - Okta
+      - Auth0
+    </Expandable>
+  </Tab>
+  <Tab title="Enterprise SSO" icon="building">
+    Integrate with enterprise identity providers for organization-wide single sign-on and centralized user management.
+    
+    <Callout kind="tip">Contact our enterprise support team to configure SAML or LDAP integration for your organization.</Callout>
+  </Tab>
+</Tabs>
+
+## API Authentication
+
+When accessing Aaron AI programmatically, you need to authenticate your requests using API keys or OAuth tokens.
+
+<Steps>
+  <Step title="Generate API Key" icon="key">
+    Create an API key from your account settings. Choose appropriate permissions for the key.
+    
+    <CodeGroup tabs="cURL,JavaScript">
+      ````bash
+      curl -X POST https://api.aaron.ai/keys \
+        -H "Authorization: Bearer YOUR_TOKEN" \
+        -H "Content-Type: application/json" \
+        -d '{"name":"My API Key","permissions":["read","write"]}'
+      ````
+      ````javascript
+      const createApiKey = async (token, keyData) => {
+        const response = await fetch('/api/keys', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(keyData)
+        });
+        return response.json();
+      };
+      
+      createApiKey('your_token_here', {
+        name: 'My API Key',
+        permissions: ['read', 'write']
+      });
+      ````
+    </CodeGroup>
+  </Step>
+  <Step title="Use API Key" icon="code">
+    Include the API key in your request headers for authentication.
+  </Step>
+  <Step title="Manage Permissions" icon="settings">
+    Control what actions the API key can perform by setting granular permissions.
+  </Step>
+</Steps>
+
+## User Roles and Permissions
+
+Aaron AI uses role-based access control to manage what users can do within your documentation projects.
+
+| Role | Description | Permissions |
+|------|-------------|-------------|
+| Owner | Full control over project | Create, read, update, delete all content; manage users |
+| Editor | Content creation and editing | Create and edit documents; cannot delete or manage users |
+| Viewer | Read-only access | View documents; cannot make changes |
+| Guest | Limited access | Access to specific documents only |
+
+<Callout kind="alert">Regularly review and update user roles to maintain security as your team grows.</Callout>
+
+## Security Best Practices
+
+Follow these guidelines to keep your Aaron AI documentation secure and protect sensitive information.
+
+<ExpandableGroup>
+  <Expandable title="Password Policies" default-open="true">
+    Use strong passwords with at least 12 characters, including uppercase, lowercase, numbers, and symbols. Enable two-factor authentication for additional security.
+  </Expandable>
+  <Expandable title="API Key Management" default-open="false">
+    Rotate API keys regularly and revoke unused keys immediately. Never share API keys in public repositories or insecure communications.
+  </Expandable>
+  <Expandable title="Session Management" default-open="false">
+    Configure automatic session timeouts and monitor for suspicious login attempts. Use secure connections (HTTPS) at all times.
+  </Expandable>
+</ExpandableGroup>
+
+## Troubleshooting Authentication Issues
+
+Common authentication problems and their solutions.
+
+<ExpandableGroup>
+  <Expandable title="Login Problems" default-open="true">
+    If you're having trouble logging in, first check that your email and password are correct. Reset your password if needed, and ensure your account is verified.
+  </Expandable>
+  <Expandable title="API Authentication Errors" default-open="false">
+    Verify that your API key is valid and has the necessary permissions. Check that the key is included correctly in your request headers.
+  </Expandable>
+  <Expandable title="SSO Configuration Issues" default-open="false">
+    For enterprise SSO problems, contact your IT administrator to verify the SAML or OAuth configuration settings.
+  </Expandable>
+</ExpandableGroup>

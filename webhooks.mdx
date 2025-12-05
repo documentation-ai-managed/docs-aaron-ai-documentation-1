@@ -1,0 +1,252 @@
+---
+title: Webhooks
+description: Set up and manage webhooks for real-time notifications in Aaron AI Documentation
+---
+
+## Webhooks Overview
+
+Webhooks in Aaron AI Documentation enable real-time communication between your documentation platform and external systems. When specific events occur in your projects, Aaron AI can automatically send HTTP requests to your configured endpoints, allowing you to react to changes instantly.
+
+## Setting Up Webhooks
+
+Configure webhooks to receive notifications about documentation events and changes.
+
+<Steps>
+  <Step title="Create Webhook" icon="plus">
+    Add a new webhook endpoint from your project settings or API.
+    
+    <CodeGroup tabs="JavaScript,Python">
+      ````javascript
+      const createWebhook = async (apiKey, webhookData) => {
+        const response = await fetch('/api/webhooks', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(webhookData)
+        });
+        return response.json();
+      };
+      
+      createWebhook('your_api_key', {
+        url: 'https://your-app.com/webhook',
+        events: ['document.created', 'document.updated'],
+        secret: 'your_webhook_secret'
+      });
+      ````
+      ````python
+      import requests
+      
+      def create_webhook(api_key, webhook_data):
+        response = requests.post('/api/webhooks', 
+          headers={
+            'Authorization': f'Bearer {api_key}',
+            'Content-Type': 'application/json'
+          },
+          json=webhook_data)
+        return response.json()
+      
+      create_webhook('your_api_key', {
+        'url': 'https://your-app.com/webhook',
+        'events': ['document.created', 'document.updated'],
+        'secret': 'your_webhook_secret'
+      })
+      ````
+    </CodeGroup>
+  </Step>
+  <Step title="Configure Events" icon="bell">
+    Choose which events should trigger webhook notifications.
+  </Step>
+  <Step title="Test Webhook" icon="zap">
+    Send a test event to verify your endpoint is working correctly.
+  </Step>
+  <Step title="Secure Connection" icon="shield">
+    Implement proper security measures for your webhook endpoints.
+  </Step>
+</Steps>
+
+## Available Events
+
+Aaron AI supports a wide range of events that can trigger webhook notifications.
+
+<Tabs>
+  <Tab title="Document Events" icon="file-text">
+    Notifications for changes to documents and content.
+    
+    <Expandable title="Document Event Types" default-open="true">
+      - `document.created`: New document added to project
+      - `document.updated`: Existing document modified
+      - `document.deleted`: Document removed from project
+      - `document.published`: Document made public
+      - `document.versioned`: New version created
+    </Expandable>
+  </Tab>
+  <Tab title="Project Events" icon="folder">
+    Notifications for project-level changes and management.
+    
+    <Callout kind="info">Project events help you track team collaboration and project lifecycle changes.</Callout>
+  </Tab>
+  <Tab title="User Events" icon="users">
+    Notifications for user-related activities and access changes.
+    
+    <Expandable title="User Event Types" default-open="false">
+      - `user.invited`: New user invited to project
+      - `user.joined`: User accepted invitation
+      - `user.role_changed`: User permissions updated
+      - `user.removed`: User access revoked
+    </Expandable>
+  </Tab>
+</Tabs>
+
+## Webhook Payloads
+
+Understand the structure and content of webhook payloads sent by Aaron AI.
+
+<CodeGroup tabs="Example Payload,Schema">
+  ````json
+  {
+    "id": "wh_123456789",
+    "event_type": "document.updated",
+    "created_at": "2024-01-15T10:30:00Z",
+    "data": {
+      "document_id": "doc_987654321",
+      "project_id": "proj_123456789",
+      "title": "API Reference",
+      "updated_by": "user@example.com",
+      "changes": {
+        "sections_added": 2,
+        "sections_modified": 1,
+        "word_count": 15420
+      }
+    },
+    "signature": "sha256=abc123def456..."
+  }
+  ````
+  ````json
+  {
+    "type": "object",
+    "properties": {
+      "id": {"type": "string"},
+      "event_type": {"type": "string"},
+      "created_at": {"type": "string", "format": "date-time"},
+      "data": {"type": "object"},
+      "signature": {"type": "string"}
+    },
+    "required": ["id", "event_type", "created_at", "data"]
+  }
+  ````
+</CodeGroup>
+
+<Callout kind="alert">Always verify webhook signatures to ensure the request originates from Aaron AI and hasn't been tampered with.</Callout>
+
+## Security Best Practices
+
+Implement robust security measures to protect your webhook endpoints.
+
+<ExpandableGroup>
+  <Expandable title="Signature Verification" default-open="true">
+    Use the webhook secret to verify that incoming requests are authentic and haven't been modified in transit.
+    
+    <CodeGroup tabs="Node.js,Python">
+      ````javascript
+      const crypto = require('crypto');
+      
+      function verifySignature(payload, signature, secret) {
+        const expectedSignature = crypto
+          .createHmac('sha256', secret)
+          .update(payload, 'utf8')
+          .digest('hex');
+        
+        return `sha256=${expectedSignature}` === signature;
+      }
+      
+      // Usage in webhook handler
+      const isValid = verifySignature(
+        JSON.stringify(req.body), 
+        req.headers['x-aaron-signature'], 
+        process.env.WEBHOOK_SECRET
+      );
+      
+      if (!isValid) {
+        return res.status(401).send('Invalid signature');
+      }
+      ````
+      ````python
+      import hmac
+      import hashlib
+      
+      def verify_signature(payload, signature, secret):
+        expected = hmac.new(
+          secret.encode('utf-8'), 
+          payload.encode('utf-8'), 
+          hashlib.sha256
+        ).hexdigest()
+        return f'sha256={expected}' == signature
+      
+      # Usage in webhook handler
+      is_valid = verify_signature(
+        json.dumps(request.get_json()), 
+        request.headers.get('X-Aaron-Signature'), 
+        os.getenv('WEBHOOK_SECRET')
+      )
+      
+      if not is_valid:
+        return 'Invalid signature', 401
+      ````
+    </CodeGroup>
+  </Expandable>
+  <Expandable title="IP Whitelisting" default-open="false">
+    Restrict webhook requests to known Aaron AI IP addresses for additional security.
+  </Expandable>
+  <Expandable title="Rate Limiting" default-open="false">
+    Implement rate limiting on your webhook endpoints to prevent abuse and ensure system stability.
+  </Expandable>
+</ExpandableGroup>
+
+## Common Use Cases
+
+Discover how webhooks can enhance your workflows and integrations.
+
+<Columns cols={2}>
+  <Card title="CI/CD Integration" icon="git-branch" href="#ci-cd-webhooks">
+    Trigger automated builds and deployments when documentation is updated.
+  </Card>
+  <Card title="Notification Systems" icon="bell" href="#notification-webhooks">
+    Send alerts to Slack, email, or other channels when important changes occur.
+  </Card>
+  <Card title="Content Sync" icon="refresh-cw" href="#sync-webhooks">
+    Automatically sync documentation changes to external systems or databases.
+  </Card>
+  <Card title="Audit Logging" icon="file-text" href="#audit-webhooks">
+    Maintain comprehensive logs of all documentation changes for compliance.
+  </Card>
+</Columns>
+
+## Error Handling and Retries
+
+Manage webhook delivery failures and implement retry logic.
+
+| HTTP Status | Description | Action |
+|-------------|-------------|--------|
+| 200-299 | Success | No retry needed |
+| 400-499 | Client error | Check payload, fix endpoint |
+| 500-599 | Server error | Retry with exponential backoff |
+
+<Callout kind="tip">Implement idempotent webhook handlers to safely process duplicate events.</Callout>
+
+## Monitoring and Debugging
+
+Track webhook performance and troubleshoot delivery issues.
+
+<ExpandableGroup>
+  <Expandable title="Delivery Logs" default-open="true">
+    Review webhook delivery attempts, response codes, and timing information in Aaron AI's dashboard.
+  </Expandable>
+  <Expandable title="Test Webhooks" default-open="false">
+    Use Aaron AI's webhook testing tools to send sample events and verify your endpoint's response.
+  </Expandable>
+  <Expandable title="Failure Alerts" default-open="false">
+    Set up alerts for webhook delivery failures to quickly identify and resolve integration issues.
+  </Expandable>
+</ExpandableGroup>

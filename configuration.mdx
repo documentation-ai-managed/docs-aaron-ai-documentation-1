@@ -1,0 +1,185 @@
+---
+title: Configuration
+description: Configure and customize your Aaron AI Documentation workspace
+---
+
+## Configuration Overview
+
+Configuring Aaron AI Documentation allows you to tailor the platform to your team's specific needs and workflows. From basic project settings to advanced customization options, you can create a documentation environment that fits your organization's requirements.
+
+## Project Configuration
+
+Set up and manage your documentation projects with detailed configuration options.
+
+<Steps>
+  <Step title="Create New Project" icon="plus">
+    Start by creating a new project from your dashboard. Choose a descriptive name and optional description.
+    
+    <CodeGroup tabs="JavaScript,Python">
+      ````javascript
+      const createProject = async (projectData) => {
+        const response = await fetch('/api/projects', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${process.env.API_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(projectData)
+        });
+        return response.json();
+      };
+      
+      createProject({
+        name: 'API Documentation',
+        description: 'Comprehensive API reference and guides',
+        visibility: 'private'
+      });
+      ````
+      ````python
+      import requests
+      import os
+      
+      def create_project(project_data):
+        response = requests.post('/api/projects', 
+          headers={
+            'Authorization': f"Bearer {os.getenv('API_KEY')}",
+            'Content-Type': 'application/json'
+          },
+          json=project_data)
+        return response.json()
+      
+      create_project({
+        'name': 'API Documentation',
+        'description': 'Comprehensive API reference and guides',
+        'visibility': 'private'
+      })
+      ````
+    </CodeGroup>
+  </Step>
+  <Step title="Configure Settings" icon="settings">
+    Adjust project settings including visibility, version control, and collaboration options.
+    
+    <Expandable title="Project Settings Options" default-open="false">
+      - **Visibility**: Public, private, or team-only access
+      - **Version Control**: Enable/disable automatic versioning
+      - **Collaboration**: Allow comments, suggestions, or direct editing
+      - **Notifications**: Email alerts for changes and mentions
+    </Expandable>
+  </Step>
+  <Step title="Set Permissions" icon="shield">
+    Define user roles and access levels for team members and external contributors.
+  </Step>
+  <Step title="Customize Appearance" icon="palette">
+    Personalize the look and feel with custom branding and themes.
+  </Step>
+</Steps>
+
+## Workspace Customization
+
+Customize your Aaron AI workspace to match your brand and improve user experience.
+
+<Tabs>
+  <Tab title="Branding" icon="image">
+    Add your company logo, choose color schemes, and customize the overall appearance of your documentation.
+    
+    <Callout kind="info">Custom branding helps create a consistent experience for your users and reinforces brand recognition.</Callout>
+    
+    <Columns cols={2}>
+      <Card title="Logo Upload" icon="upload" href="#logo-settings">
+        Upload and configure your company logo for use in documentation headers and exports.
+      </Card>
+      <Card title="Color Themes" icon="palette" href="#color-themes">
+        Choose from predefined themes or create custom color schemes for your workspace.
+      </Card>
+    </Columns>
+  </Tab>
+  <Tab title="Layout" icon="layout">
+    Configure the layout and navigation structure of your documentation projects.
+    
+    <Expandable title="Layout Options" default-open="true">
+      - Sidebar navigation with collapsible sections
+      - Breadcrumb navigation for easy orientation
+      - Search functionality with filters
+      - Table of contents generation
+    </Expandable>
+  </Tab>
+  <Tab title="Integrations" icon="plug">
+    Connect Aaron AI with external tools and services for enhanced functionality.
+    
+    <Callout kind="tip">Integrations can automate workflows and sync data between systems.</Callout>
+  </Tab>
+</Tabs>
+
+## Advanced Configuration
+
+For organizations with specific requirements, Aaron AI offers advanced configuration options.
+
+<ExpandableGroup>
+  <Expandable title="Custom Domains" default-open="true">
+    Set up custom domains for your documentation to match your company branding. This creates a seamless experience for your users.
+    
+    <CodeGroup tabs="DNS,CNAME">
+      ````bash
+      # Add CNAME record for custom domain
+      docs.yourcompany.com CNAME aaron-ai-docs.netlify.app
+      ````
+      ````bash
+      # Alternative: Point A record to IP
+      docs.yourcompany.com A 192.0.2.1
+      ````
+    </CodeGroup>
+  </Expandable>
+  <Expandable title="Single Sign-On" default-open="false">
+    Configure enterprise-grade SSO for seamless authentication across your organization. Supports SAML, OAuth, and LDAP protocols.
+  </Expandable>
+  <Expandable title="Audit Logging" default-open="false">
+    Enable detailed audit logs to track all changes and access to your documentation. Essential for compliance and security monitoring.
+  </Expandable>
+  <Expandable title="API Rate Limiting" default-open="false">
+    Configure rate limits for API access to prevent abuse and ensure fair usage across your organization.
+  </Expandable>
+</ExpandableGroup>
+
+## Environment Configuration
+
+Aaron AI supports multiple environments for development, staging, and production deployments.
+
+| Environment | Purpose | Configuration |
+|-------------|---------|---------------|
+| Development | Testing new features | Debug logging enabled, relaxed security |
+| Staging | Pre-production testing | Production-like settings, limited access |
+| Production | Live documentation | Full security, performance optimization |
+
+<Callout kind="alert">Always test configuration changes in development or staging environments before applying to production.</Callout>
+
+## Backup and Recovery
+
+Configure automated backups and disaster recovery options to protect your documentation.
+
+<Steps>
+  <Step title="Enable Backups" icon="database">
+    Set up automatic daily backups of your projects and documents.
+  </Step>
+  <Step title="Configure Retention" icon="clock">
+    Define how long to keep backup files and versions.
+  </Step>
+  <Step title="Test Recovery" icon="refresh-cw">
+    Regularly test your backup and recovery procedures to ensure they work when needed.
+  </Step>
+</Steps>
+
+## Monitoring and Analytics
+
+Track usage and performance of your Aaron AI Documentation with built-in analytics.
+
+<ExpandableGroup>
+  <Expandable title="Usage Metrics" default-open="true">
+    Monitor page views, search queries, and user engagement to understand how your documentation is being used.
+  </Expandable>
+  <Expandable title="Performance Monitoring" default-open="false">
+    Track response times, error rates, and system health to ensure optimal performance.
+  </Expandable>
+  <Expandable title="Content Analytics" default-open="false">
+    Analyze which documents are most popular and identify areas that may need improvement.
+  </Expandable>
+</ExpandableGroup>

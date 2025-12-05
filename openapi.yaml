@@ -1,0 +1,226 @@
+openapi: '3.0.0'
+info:
+  version: 1.0.0
+  title: Aaron AI Documentation API
+  license:
+    name: MIT
+servers:
+  - url: https://api.aaron.ai/v1
+paths:
+  /projects:
+    get:
+      summary: List all documentation projects
+      operationId: listProjects
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time (max 100)
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: A paged array of projects
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Projects'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a new documentation project
+      operationId: createProject
+      responses:
+        201:
+          description: Project created successfully
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /projects/{projectId}:
+    get:
+      summary: Get details for a specific project
+      operationId: getProject
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          description: The unique identifier of the project to retrieve
+          schema:
+            type: string
+      responses:
+        200:
+          description: Project details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /documents:
+    get:
+      summary: List all documents across projects
+      operationId: listDocuments
+      parameters:
+        - name: projectId
+          in: query
+          description: Filter documents by project ID
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: A list of documents
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Documents'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a new document
+      operationId: createDocument
+      responses:
+        201:
+          description: Document created successfully
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users:
+    get:
+      summary: List all users in the system
+      operationId: listUsers
+      parameters:
+        - name: limit
+          in: query
+          description: Number of users to return (max 100)
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a new user account
+      operationId: createUser
+      responses:
+        201:
+          description: User account created successfully
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Project:
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Projects:
+      type: array
+      items:
+        $ref: '#/components/schemas/Project'
+    Document:
+      required:
+        - id
+        - title
+        - project_id
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        project_id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Documents:
+      type: array
+      items:
+        $ref: '#/components/schemas/Document'
+    User:
+      required:
+        - id
+        - email
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+          enum: [admin, editor, viewer]
+        created_at:
+          type: string
+          format: date-time
+    Users:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

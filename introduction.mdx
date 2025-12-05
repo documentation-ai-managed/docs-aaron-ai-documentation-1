@@ -1,0 +1,103 @@
+---
+title: Introduction
+description: Overview of Aaron AI Documentation and its core capabilities
+---
+
+## Getting Started with Aaron AI
+
+Aaron AI Documentation provides a comprehensive platform for organizing and managing all your project documentation in one centralized space. Whether you're building APIs, maintaining product guides, or collaborating on technical writing, Aaron AI offers powerful tools to streamline your documentation workflow. This introduction will help you understand the key features and get started quickly.
+
+<Columns cols={3}>
+  <Card title="Projects" icon="folder" href="#projects">
+    Create and manage documentation projects with version control and collaboration features.
+  </Card>
+  <Card title="Documents" icon="file-text" href="#documents">
+    Write, edit, and organize your documentation with rich formatting and real-time editing.
+  </Card>
+  <Card title="Users" icon="users" href="#users">
+    Manage team access and permissions for secure documentation collaboration.
+  </Card>
+</Columns>
+
+## Key Features
+
+Aaron AI Documentation stands out with its intuitive interface and robust feature set designed for technical teams.
+
+<Tabs>
+  <Tab title="Collaboration" icon="users">
+    Enable real-time collaboration with your team members, allowing multiple users to edit documents simultaneously without conflicts. Track changes and maintain version history for all your documentation.
+    
+    <Callout kind="tip">Invite team members to projects and assign roles like editor or viewer to control access levels.</Callout>
+  </Tab>
+  <Tab title="Version Control" icon="git-branch">
+    Built-in version control ensures you never lose important documentation changes. Create branches for different releases and merge changes seamlessly.
+    
+    <Callout kind="info">Each project maintains a complete history of all edits with timestamps and user attribution.</Callout>
+  </Tab>
+  <Tab title="API Integration" icon="plug">
+    Integrate Aaron AI with your existing tools and workflows through our comprehensive API. Automate documentation updates and sync with your development process.
+    
+    <Callout kind="success">Webhooks allow you to trigger actions in external systems when documentation changes occur.</Callout>
+  </Tab>
+</Tabs>
+
+## Quick Setup
+
+Getting started with Aaron AI Documentation is straightforward and takes just a few minutes.
+
+<Steps>
+  <Step title="Create Account" icon="user">
+    Sign up for a free Aaron AI account using your email address. No credit card required for basic plans.
+    
+    <CodeGroup tabs="Web,CURL">
+      ````javascript
+      // Sign up via web interface
+      const signup = {
+        email: 'user@example.com',
+        password: 'securepass123'
+      };
+      ````
+      ````bash
+      curl -X POST https://api.aaron.ai/auth/signup \
+        -H "Content-Type: application/json" \
+        -d '{"email":"user@example.com","password":"securepass123"}'
+      ````
+    </CodeGroup>
+  </Step>
+  <Step title="Create Project" icon="folder">
+    Set up your first documentation project. Choose a name that reflects your product or service.
+    
+    <Callout kind="tip">Project names should be descriptive and include version information if applicable.</Callout>
+  </Step>
+  <Step title="Add Team Members" icon="users">
+    Invite colleagues to collaborate on your documentation. Share read or write access as needed.
+  </Step>
+  <Step title="Start Writing" icon="edit">
+    Begin creating your first document. Use our rich text editor with markdown support for formatting.
+  </Step>
+</Steps>
+
+## Use Cases
+
+Aaron AI Documentation serves various documentation needs across different industries and team sizes.
+
+<ExpandableGroup>
+  <Expandable title="API Documentation" default-open="true">
+    Perfect for maintaining comprehensive API references with interactive examples, authentication guides, and endpoint documentation. Keep your developer portal up-to-date automatically.
+  </Expandable>
+  <Expandable title="Product Guides" default-open="false">
+    Create user manuals, tutorials, and onboarding materials that your customers can access anytime. Include screenshots, videos, and step-by-step instructions.
+  </Expandable>
+  <Expandable title="Internal Knowledge Base" default-open="false">
+    Build a centralized repository for internal processes, troubleshooting guides, and team knowledge. Reduce time spent answering repetitive questions.
+  </Expandable>
+  <Expandable title="Compliance Documentation" default-open="false">
+    Maintain regulatory compliance documents with version control and audit trails. Ensure your documentation meets industry standards and legal requirements.
+  </Expandable>
+</ExpandableGroup>
+
+## Next Steps
+
+Now that you understand Aaron AI's capabilities, explore our authentication setup to secure your documentation space, or dive into configuration options to customize your workspace. For developers, check out our API integration guide to connect Aaron AI with your existing tools.
+
+Aaron AI Documentation empowers teams to create, manage, and share knowledge effectively. With features like real-time collaboration, version control, and powerful APIs, you can build a documentation system that scales with your organization.
